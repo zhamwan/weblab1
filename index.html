@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" href="#"/>
+    <title>Web lab №1</title>
+    <style>
+        body {
+            overflow-x: hidden;
+            overflow-y: visible;
+            margin: 0;
+            display: grid;
+            grid-template-areas:
+                "header header"
+                "x-param y-param"
+                "r-param r-param"
+                "areas areas"
+                "sbm sbm"
+                "err err"
+                "tbl tbl";
+            grid-template-columns: 50% 50%;
+            grid-gap: 8px;
+            animation-name: bg-animation;
+            animation-duration: 10s;
+            animation-iteration-count: infinite;
+            animation-timing-function: ease-in-out;
+        }
+
+        @keyframes bg-animation {
+            0%      {background-color: #15a7a7;}
+            25%     {background-color: #0bc9c3;}
+            50%     {background-color: #176969;}
+            75%     {background-color: #0bc9c3;}
+            100%    {background-color: #15a7a7;}
+        }
+        header {
+            grid-area: header;
+            padding: 8px;
+            font-family: cursive;
+            background-color: #e2e2e2;
+        }
+
+        header h1 {
+            margin: 0
+        }
+
+        header h1:first-letter {
+            color: red;
+        }
+
+        header h2 {
+            margin: 0
+        }
+
+        .container {
+            padding: 8px;
+        }
+
+        .param {
+            margin-top: 2%;
+        }
+
+        .param.x-param {
+            margin-left: 90%;
+            display: flex;
+            align-items: center;
+            grid-area: x-param;
+            justify-self: center;
+            align: center;
+        }
+
+        .param.y-param {
+            align: center;
+            margin-left: 88%;
+            vertical-align: center;
+            grid-area: y-param;
+            justify-self: center;
+            align-items: center;
+        }
+
+        .param.r-param {
+            margin-left:  33%;
+            display: flex;
+            position: absolute;
+            align-items: center;
+            justify-self: center;
+        }
+
+        .select {
+            display: flex;
+            margin-right: 8px;
+        }
+
+
+        #x-select {
+            display: flex;
+            flex-flow: row wrap;
+        }
+
+        #r-buttons {
+            display: flex;
+            flex-flow: row wrap;
+            justify-content: space-around;
+
+        }
+
+        .r-button {
+            height: 40px;
+            width: 80px;
+            margin: 8px;
+        }
+
+        #areas {
+            grid-area: areas;
+            justify-self: center;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 13%;
+            align: center;
+            margin-left: 84%;
+        }
+
+        .submit-button {
+            margin-left: 90%;
+            grid-area: sbm;
+            width: 200px;
+            height: 64px;
+        }
+
+        #errors {
+            grid-area: err;
+            list-style-type: none
+        }
+
+        #result-table {
+            grid-area: tbl;
+            width: 205%;
+            text-align: center;
+            border-collapse: collapse;
+            color: white;
+        }
+
+        #result-table tr {
+            height: 2em;
+        }
+
+        #result-table tr.table-header:hover {
+            background-color: #c8b5e9;
+        }
+
+        .coords-col {
+            width: 12%;
+        }
+
+        .time-col {
+            width: 25%;
+        }
+
+        tr {
+            background-color: gray;
+        }
+
+        tr.hit-no {
+            font-style: italic;
+            color: black;
+            background-color: indianred;
+        }
+
+        tr.hit-yes {
+            color: initial;
+            background-color: lightgreen;
+        }
+
+
+    </style>
+</head>
+<body>
+<header>
+    <h1>Лабораторная работа №1. Вариант 13109</h1>
+    <h2>Жамков Иван, P3213</h2>
+</header>
+<form id="input-form" action="" method="POST">
+<div class="param x-param">
+    <label for="x-select">X: </label>
+    <div >
+        <select name="xval" class="x-select" id="x-select">
+            <option disabled >Выберите X</option>
+            <option value="-4">-4</option>
+            <option value="-3">-3</option>
+            <option value="-2">-2</option>
+            <option value="-1">-1</option>
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+        </select>
+    </div>
+</div>
+
+<div class="param y-param">
+    <label for="y-input">Y: </label>
+    <input id="y-input" type="text" name="yval" maxlength="5" autocomplete="off" placeholder="(-3; 3)">
+</div>
+
+<div class="param r-param">
+    <label for="r-buttons">R: </label>
+    <div id="r-buttons">
+        <input type="button" value="1" class="r-button" onclick="chooseR(this)" name="rval">
+        <input type="button" value="2" class="r-button" onclick="chooseR(this)" name="rval">
+        <input type="button" value="3" class="r-button" onclick="chooseR(this)" name="rval">
+        <input type="button" value="4" class="r-button" onclick="chooseR(this)" name="rval">
+        <input type="button" value="5" class="r-button" onclick="chooseR(this)" name="rval">
+    </div>
+</div>
+
+<img id="areas" class="areas" src="graph.PNG" alt="areas"/>
+
+
+<input class="submit-button" id="submit-button" type="submit" value="Submit">
+<ul id="errors" style="list-style-type: none"></ul>
+
+<table id="result-table" class="result-table">
+    <tr class="table-header">
+        <th class="coords-col">X</th>
+        <th class="coords-col">Y</th>
+        <th class="coords-col">R</th>
+        <th class="time-col">Время запроса</th>
+        <th class="time-col">Время исполнения</th>
+        <th class="hitres-col">Попадание</th>
+    </tr>
+</table>
+</form>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
